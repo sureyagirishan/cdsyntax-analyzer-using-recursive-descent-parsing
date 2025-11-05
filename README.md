@@ -1,83 +1,104 @@
-# CD Syntax Analyzer using Recursive Descent Parsing
+# Recursive Descent Parser - React Application
 
-This project provides a simple full-stack template:
-- Frontend: React.js template under `frontend/`
-- Backend: Python recursive descent parser under `backend/`
+A simple React-based web application that implements a **recursive descent parser** to check if strings follow a specific grammar pattern.
 
-## Repository Structure
+## Features
+
+- **Real-time parsing**: Type a string and instantly see if it's parsed correctly
+- **Visual feedback**: Green checkmark for valid strings, red X for invalid ones
+- **Simple grammar**: Currently parses balanced parentheses - `S → (S) | ε`
+
+## Project Structure
+
 ```
-frontend/
-  README.md
-backend/
-  parser.py
-README.md
+.
+├── public/
+│   └── index.html          # HTML template
+├── src/
+│   ├── App.js              # Main React component
+│   ├── Parser.js           # Parser logic
+│   ├── App.css             # Styles
+│   └── index.js            # React entry point
+├── package.json            # Dependencies and scripts
+├── .gitignore             # Git ignore rules
+└── README.md              # This file
 ```
 
 ## Prerequisites
-- Node.js 16+ and npm
-- Python 3.9+
 
-## Backend (Python) — Parser API skeleton
-The `backend/parser.py` contains a basic recursive descent parser for arithmetic expressions and can be used as a module.
+- Node.js (v14 or higher)
+- npm (comes with Node.js)
 
-Run a quick test:
+## Installation
+
+1. **Clone the repository**
 ```bash
-python3 backend/parser.py "1 + 2*(3-4/2)"
-```
-You should see a JSON-formatted AST in the output.
-
-To expose this as an HTTP API, you can add a simple Flask app (example):
-```python
-# backend/app.py
-from flask import Flask, request, jsonify
-from parser import parse_expression, ast_to_dict
-from flask_cors import CORS
-
-app = Flask(__name__)
-CORS(app)
-
-@app.post('/api/parse')
-def parse():
-    data = request.get_json(force=True)
-    code = data.get('code', '')
-    try:
-        ast = parse_expression(code)
-        return jsonify(ast_to_dict(ast))
-    except SyntaxError as e:
-        return jsonify({"error": str(e)}), 400
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
-```
-Install dependencies and run:
-```bash
-pip install flask flask-cors
-python3 backend/app.py
+git clone https://github.com/sureyagirishan/cdsyntax-analyzer-using-recursive-descent-parsing.git
+cd cdsyntax-analyzer-using-recursive-descent-parsing
 ```
 
-## Frontend (React)
-See `frontend/README.md` for full instructions.
-
-Quick start:
+2. **Install dependencies**
 ```bash
-cd frontend
 npm install
+```
+
+## Running the Application
+
+Start the development server:
+```bash
 npm start
 ```
-Set the backend URL via `.env` in `frontend/`:
+
+The application will open in your browser at `http://localhost:3000`
+
+## How to Use
+
+1. Open the application in your browser
+2. Type a string in the input box
+3. The parser will automatically check if the string follows the grammar
+4. See instant feedback: ✅ for valid strings, ❌ for invalid ones
+
+## Example Inputs
+
+**Valid strings:**
+- `()` - One pair of balanced parentheses
+- `(())` - Nested parentheses
+- `` (empty string)
+
+**Invalid strings:**
+- `(` - Unclosed parenthesis
+- `)(` - Wrong order
+- `(()` - Missing closing parenthesis
+
+## Grammar
+
+The parser implements this simple context-free grammar:
 ```
-REACT_APP_API_URL=http://localhost:5000/api
+S → (S) | ε
+```
+Where:
+- `S` is the start symbol
+- `ε` represents an empty string
+
+## Customizing the Parser
+
+You can modify the grammar by editing the `isParsed` function in `src/Parser.js`.
+
+## Build for Production
+
+Create an optimized production build:
+```bash
+npm run build
 ```
 
-## Development Workflow
-- Start backend API at port 5000
-- Start React dev server at port 3000
-- Frontend calls `POST /api/parse` with `{ code: string }`
+The build files will be in the `build/` directory.
 
-## Future Enhancements
-- Extend grammar to your target language
-- Add token stream view and error recovery
-- Containerize with Docker and compose services
+## Technologies Used
+
+- **React 18** - UI library
+- **JavaScript (ES6+)** - Programming language
+- **CSS3** - Styling
 
 ## License
-MIT
+
+This project is open source and available for educational purposes.
